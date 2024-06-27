@@ -1,3 +1,4 @@
+# get the latest version of this file at https://raw.githubusercontent.com/oylbin/bashlib/main/bashlib.sh
 if [ -z "$BASH" ]; then echo "bashlib.sh supports bash only!"; exit 1; fi
 
 #SCRIPTDIR="$( cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
