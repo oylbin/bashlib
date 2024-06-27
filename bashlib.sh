@@ -8,24 +8,8 @@ export PS4='+${BASH_SOURCE}:${LINENO}:${FUNCNAME[0]}: '
 
 shopt -s expand_aliases
 
-LIB_SH_XTRACE_STATUS=0
-function toggle_xtrace {
-    if [[ $- = *x* ]]; then
-        export LIB_SH_XTRACE_STATUS=1
-        set +x
-    else
-        export LIB_SH_XTRACE_STATUS=0
-    fi
-}
-
-function restore_xtrace {
-    [[ "$LIB_SH_XTRACE_STATUS" == "1" ]] && set -x
-}
-
 function log_with_time {
-    toggle_xtrace
     echo "[$(date +'%Y-%m-%d %H:%M:%S')] $*"
-    restore_xtrace
 }
 
 # Check if the given variable names are set and non-empty.
@@ -39,17 +23,14 @@ function log_with_time {
 #   LOG_PATH="/var/log"
 #   exit_if_no_param DATA_DIR LOG_PATH
 function exit_if_no_param {
-    toggle_xtrace
     for i in "$@"
     do
         if [[ ! "${!i}" ]]
         then
             log_with_time "no input: $i"
-            restore_xtrace
             exit 1
         fi
     done
-    restore_xtrace
     return 0
 }
 
@@ -60,15 +41,12 @@ function exit_if_no_param {
 # exit_if_no_file FILE_NAME
 #
 function exit_if_no_file {
-    toggle_xtrace
     for i in "$@" ;do
         if ! test -f "${!i}"; then
             log_with_time "file not exists: $i -> ${!i}"
-            restore_xtrace
             exit 1
         fi
     done
-    restore_xtrace
     return 0
 }
 
@@ -85,37 +63,29 @@ function exit_if_no_file {
 #   exit_if_no_dir CONFIG_DIR DATA_DIR
 #
 function exit_if_no_dir {
-    toggle_xtrace
     for i in "$@" ;do
         if ! test -d "${!i}"; then
             log_with_time "dir not exists: $i"
-            restore_xtrace
             exit 1
         fi
     done
-    restore_xtrace
     return 0
 }
 
 function exit_if_no_program {
-    toggle_xtrace
     for p in "$@" ; do
         if ! which "$p" >/dev/null 2>&1; then
             log_with_time "you need install '$p' first."
-            restore_xtrace
             exit 1
         fi
     done
-    restore_xtrace
     return 0
 }
 
 function prepend_path_if_exists {
-    toggle_xtrace
     dir="$1"
     if [[ -d "$dir" ]]
     then
         export PATH="$dir":$PATH
     fi
-    restore_xtrace
 }
