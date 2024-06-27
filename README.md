@@ -1,0 +1,2 @@
+# bashlib
+useful bash functions
